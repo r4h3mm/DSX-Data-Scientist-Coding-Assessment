@@ -1,0 +1,91 @@
+# Question 4: Tables, Listings, and Graphs (TLG)
+
+## Overview
+Comprehensive adverse events reporting suite including summary tables, visualizations, and detailed listings.
+
+## Input Data
+- `pharmaverseadam::adae` - Adverse Events Analysis Dataset
+- `pharmaverseadam::adsl` - Subject Level Analysis Dataset
+
+## Deliverables
+
+### 1. Summary Table (`ae_summary_table.html`)
+**Script:** `01_create_ae_summary_table.R`
+
+- Treatment-emergent AEs by System Organ Class (SOC)
+- Counts and percentages by treatment arm:
+  - Placebo
+  - Xanomeline Low Dose
+  - Xanomeline High Dose
+- Created using {gt} package
+- Professional formatting with headers and styling
+
+### 2. Visualizations
+
+#### Plot 1: AE Severity by Treatment (`ae_severity_by_treatment.png`)
+**Script:** `02_create_visualizations.R`
+
+- Stacked bar chart
+- Shows distribution of MILD/MODERATE/SEVERE AEs by treatment arm
+- Custom color scheme:
+  - MILD: #F8766D
+  - MODERATE: #00BA38
+  - SEVERE: #619CFF
+- Created with {ggplot2}
+
+#### Plot 2: Top 10 Most Frequent AEs (`top10_aes_with_ci.png`)
+**Script:** `02_create_visualizations.R`
+
+- Forest plot with 95% confidence intervals
+- Uses Clopper-Pearson exact method via {binom} package
+- Percentage of patients experiencing each AE
+- Sorted by frequency (descending)
+
+### 3. Detailed Listing (`ae_listings.html`)
+**Script:** `03_create_listings.R`
+
+- All treatment-emergent adverse events (TRTEMFL = "Y")
+- Columns displayed:
+  - Subject ID
+  - Treatment arm
+  - Adverse event term
+  - Severity
+  - Relationship to drug
+  - Start and end dates
+- Sorted by subject and start date
+- Created using {gt} package
+
+## Running the Scripts
+
+```r
+# Create summary table
+source("question_4_tlg/01_create_ae_summary_table.R")
+
+# Create visualizations
+source("question_4_tlg/02_create_visualizations.R")
+
+# Create listing
+source("question_4_tlg/03_create_listings.R")
+```
+
+## Output Files
+question_4_tlg/
+├── ae_summary_table.html
+├── ae_severity_by_treatment.png
+├── top10_aes_with_ci.png
+└── ae_listings.html
+
+## Dependencies
+```r
+library(pharmaverseadam)
+library(gtsummary)
+library(ggplot2)
+library(gt)
+library(binom)
+library(dplyr)
+```
+
+## Key Statistical Methods
+- **Frequencies & Percentages:** Based on number of unique subjects with each AE
+- **95% Confidence Intervals:** Clopper-Pearson exact method (appropriate for small sample proportions)
+- **Treatment Emergent:** Defined as TRTEMFL = "Y"
