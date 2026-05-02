@@ -1,0 +1,74 @@
+# Question 3: ADaM ADSL Dataset Creation
+
+## Overview
+Creates an Analysis Dataset Subject Level (ADSL) from SDTM source data using the {admiral} package.
+
+## Objective
+Derive key analysis variables for subject-level analysis dataset following ADaM standards.
+
+## Input SDTM Domains
+- `pharmaversesdtm::dm` - Demographics
+- `pharmaversesdtm::vs` - Vital Signs
+- `pharmaversesdtm::ex` - Exposure
+- `pharmaversesdtm::ds` - Disposition
+- `pharmaversesdtm::ae` - Adverse Events
+
+## Derived Variables
+
+### 1. Age Groups (AGEGR9, AGEGR9N)
+- **<18** (code: 1)
+- **18 - 50** (code: 2)
+- **>50** (code: 3)
+
+### 2. Treatment Start Date/Time (TRTSDTM, TRTSTMF)
+- Derived from first valid exposure record
+- Valid dose: EXDOSE > 0 OR (EXDOSE = 0 AND EXTRT contains "PLACEBO")
+- Uses `admiral::derive_vars_dtm()` with time imputation
+- TRTSTMF flag indicates imputed time values
+
+### 3. Intent-to-Treat Flag (ITTFL)
+- "Y" if ARM is populated (subject was randomized)
+- "N" if ARM is missing
+
+### 4. Abnormal Systolic BP Flag (ABNSBPFL)
+- "Y" if any systolic BP < 100 mmHg OR ≥ 140 mmHg
+- "N" otherwise
+- Based on VS domain where VSTESTCD = "SYSBP"
+
+### 5. Last Known Alive Date (LSTALVDT)
+- Maximum of:
+  - Last complete vital signs date
+  - Last adverse event start date
+  - Last disposition date
+  - Last exposure date
+- Uses `admiral::convert_dtc_to_dt()` for date conversion
+
+### 6. Cardiac Adverse Event Flag (CARPOPFL)
+- "Y" if subject had any AE with AESOC = "CARDIAC DISORDERS"
+- NA (missing) otherwise
+
+## Key admiral Functions Used
+- `derive_vars_dtm()` - Derive datetime variables with imputation
+- `convert_dtc_to_dt()` - Convert ISO8601 dates to R Date objects
+- Standard dplyr for filtering and flag creation
+
+## Running the Script
+
+```r
+source("question_3_adam/create_adsl.R")
+```
+
+## Output Summary
+- **Total Subjects:** 306
+- **Age Distribution:** All subjects >50 years (AGEGR9N = 3)
+- **ITT Population:** 100% (all subjects randomized)
+- **Abnormal BP:** Mix of Y/N flags
+- **Cardiac AEs:** Minority of subjects with "Y" flag
+
+## Dependencies
+```r
+library(admiral)
+library(pharmaversesdtm)
+library(dplyr)
+library(lubridate)
+```
