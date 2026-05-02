@@ -1,0 +1,73 @@
+# Question 1: descriptiveStats R Package
+
+## Overview
+A custom R package providing six statistical functions for descriptive analysis.
+
+## Functions
+
+### Central Tendency
+- `calc_mean()` - Calculate arithmetic mean
+- `calc_median()` - Calculate median value
+- `calc_mode()` - Calculate mode (most frequent value)
+
+### Spread/Dispersion
+- `calc_q1()` - Calculate first quartile (25th percentile)
+- `calc_q3()` - Calculate third quartile (75th percentile)
+- `calc_iqr()` - Calculate interquartile range (Q3 - Q1)
+
+## Features
+- Full Roxygen2 documentation for all functions
+- Comprehensive error handling for edge cases
+- Unit tests using {testthat}
+- Handles NA values appropriately
+- Input validation with informative error messages
+
+## Installation
+
+```r
+# Install from local source
+devtools::install("path/to/descriptiveStats")
+
+# Or load for development
+devtools::load_all("path/to/descriptiveStats")
+```
+
+## Usage
+
+```r
+library(descriptiveStats)
+
+# Example data
+x <- c(1, 2, 3, 4, 5, 5, 6, 7, 8, 9)
+
+# Calculate statistics
+calc_mean(x)    # 5
+calc_median(x)  # 5
+calc_mode(x)    # 5
+calc_q1(x)      # 3
+calc_q3(x)      # 7
+calc_iqr(x)     # 4
+```
+
+## Testing
+
+```r
+# Run package checks
+devtools::check()
+
+# Run tests
+devtools::test()
+```
+
+## Package Structure
+descriptiveStats/
+├── DESCRIPTION          # Package metadata
+├── NAMESPACE           # Exported functions
+├── R/
+│   └── stats_functions.R   # Function implementations
+├── man/                # Auto-generated documentation
+└── tests/
+└── testthat/
+└── test-stats_functions.R  # Unit tests
+
+
