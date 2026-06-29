@@ -5,6 +5,8 @@ library(pharmaverseraw)
 library(dplyr)
 library(lubridate)
 
+install.packages("xfun")
+library('xfun')
 install.packages("pharmaversesdtm")
 library(pharmaversesdtm)
 
@@ -70,7 +72,7 @@ ds <- assign_ct(
 ds <- ds %>%
   mutate(
     DSCAT = case_when(
-      DSDECOD == 'RANDOMISED' ~ 'PROTOCOL MILESTONE',
+      DSDECOD == 'RANDOMIZED' ~ 'PROTOCOL MILESTONE',
       !is.na(DSDECOD) ~ 'DISPOSITION EVENT',
       TRUE ~ NA_character_
     )
