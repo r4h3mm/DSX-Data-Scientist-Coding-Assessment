@@ -1,0 +1,62 @@
+# Question 2: SDTM DS Domain Creation
+
+## Overview
+Creates an SDTM-compliant Disposition (DS) domain from raw clinical trial data using the {sdtm.oak} package.
+
+## Objective
+Transform raw disposition data into standardized SDTM DS domain format following CDISC standards.
+
+## Input Data
+- **Source:** `pharmaverseraw::ds_raw`
+- **Records:** 850 raw disposition records
+- **Subjects:** 306 unique subjects
+
+## Output Variables
+- `STUDYID` - Study identifier
+- `DOMAIN` - Domain abbreviation (DS)
+- `USUBJID` - Unique subject identifier
+- `DSSEQ` - Sequence number
+- `DSTERM` - Reported term for disposition
+- `DSDECOD` - Standardized disposition term (controlled terminology)
+- `DSCAT` - Category (DISPOSITION EVENT / PROTOCOL MILESTONE)
+- `VISITNUM` - Visit number
+- `VISIT` - Visit name
+- `DSDTC` - Date/time of disposition
+- `DSSTDTC` - Start date/time of disposition
+- `DSSTDY` - Study day of disposition start
+
+## Key Features
+
+### Controlled Terminology Mapping
+Uses CDISC controlled terminology (codelist C66727) to map:
+- "Complete" → "COMPLETED"
+- "Adverse Event" → "ADVERSE EVENT"
+- "Protocol Violation" → "PROTOCOL VIOLATION"
+- And 8 other disposition terms
+
+### sdtm.oak Functions Used
+- `assign_no_ct()` - Assign variables without controlled terminology
+- `assign_ct()` - Map to controlled terminology
+- `derive_seq()` - Generate sequence numbers
+- `derive_study_day()` - Calculate study days from reference date
+
+## Running the Script
+
+```r
+source("question_2_sdtm/02_create_ds_domain.R")
+```
+
+## Dependencies
+```r
+library(sdtm.oak)
+library(pharmaverseraw)
+library(pharmaversesdtm)
+library(dplyr)
+library(lubridate)
+```
+
+## Output Summary
+- **Total Records:** 560 disposition events
+- **Unique Subjects:** 306
+- **Most Common Events:** RANDOMIZED (254), COMPLETED (110), ADVERSE EVENT (92)
+- 
